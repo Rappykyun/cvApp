@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  User,
+
   Mail,
   Phone,
   MapPin,
@@ -16,13 +16,13 @@ import { Label } from "@/components/ui/label";
 const CVPersonalInfo = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [personalInfo, setPersonalInfo] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
+    name: "Your Name",
+    email: "your.email@example.com",
     phone: "+1 (555) 123-4567",
     address: "123 Main St, Anytown, USA",
-    occupation: "Software Developer",
-    education: "BS in Computer Science",
-    birthDate: "1990-01-01",
+    occupation: "Your Occupation",
+    education: "Your Education",
+    birthDate: "YYYY-MM-DD",
   });
 
   const handleEdit = () => setIsEditing(true);
@@ -36,7 +36,7 @@ const CVPersonalInfo = () => {
   const InfoItem = ({ icon, label, value }) => (
     <div className="flex items-center space-x-2 mb-2">
       {icon}
-      <span className="font-semibold">{label}:</span>
+      <span className="font-semibold w-32">{label}:</span>
       <span>{value}</span>
     </div>
   );
@@ -52,22 +52,25 @@ const CVPersonalInfo = () => {
         {isEditing ? (
           <form className="space-y-4">
             {Object.entries(personalInfo).map(([key, value]) => (
-              <div key={key} className="space-y-2">
-                <Label htmlFor={key}>
+              <div key={key} className="flex items-center space-x-4">
+                <Label htmlFor={key} className="w-32">
                   {key.charAt(0).toUpperCase() + key.slice(1)}
                 </Label>
                 <Input
                   id={key}
                   name={key}
-                  value={value}
+                  placeholder={value}
                   onChange={handleChange}
                   type={key === "birthDate" ? "date" : "text"}
+                  className="flex-1"
                 />
               </div>
             ))}
-            <Button onClick={handleSave} className="w-full">
-              Save
-            </Button>
+            <div className="flex justify-end">
+              <Button onClick={handleSave} className="">
+                Save
+              </Button>
+            </div>
           </form>
         ) : (
           <div>
@@ -102,9 +105,11 @@ const CVPersonalInfo = () => {
               label="Birth Date"
               value={personalInfo.birthDate}
             />
-            <Button onClick={handleEdit} className="mt-4">
-              Edit
-            </Button>
+            <div className="flex justify-end">
+              <Button onClick={handleEdit} className="">
+                Edit
+              </Button>
+            </div>
           </div>
         )}
       </CardContent>
