@@ -1,41 +1,39 @@
-import React, { useState } from "react";
-import {
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Briefcase,
-  GraduationCap,
-  Calendar,
-} from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { GraduationCap, Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const EducationalInfo = () => {
+const EducationalInfo = ({ setEducationalInfo }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [educationalInfo, setEducationalInfo] = useState({
-    Degree: "",
-    Institution: "",
-    StartDate: "",
-    EndDate: "",
-    Description: "",
+  const [educationalInfo, setEducationalInfoState] = useState({
+    degree: "",
+    institution: "",
+    startDate: "",
+    endDate: "",
+    description: "",
   });
+
+  useEffect(() => {
+    setEducationalInfo(educationalInfo);
+  }, [educationalInfo, setEducationalInfo]);
 
   const handleEdit = () => setIsEditing(true);
   const handleSave = () => setIsEditing(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEducationalInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
+    setEducationalInfoState((prevInfo) => ({ ...prevInfo, [name]: value }));
   };
 
-  const InfoItem = ({ icon, label, value }) => (
+  const InfoItem = ({ icon, label, value, placeholder }) => (
     <div className="flex items-center space-x-2 mb-2">
       {icon}
       <span className="font-semibold w-32">{label}:</span>
-      <span>{value}</span>
+      <span>
+        {value || <span className="text-muted-foreground">{placeholder}</span>}
+      </span>
     </div>
   );
 
@@ -61,31 +59,59 @@ const EducationalInfo = () => {
                   name={key}
                   value={value}
                   onChange={handleChange}
-                  className="w-full"
+                  type={key.includes("Date") ? "date" : "text"}
+                  className="flex-1"
                 />
               </div>
             ))}
             <div className="flex justify-end">
-              <Button onClick={handleSave}>Save</Button>
+              <Button onClick={handleSave} className="">
+                Save
+              </Button>
             </div>
           </form>
         ) : (
-          <>
-            {Object.entries(educationalInfo).map(([key, value]) => (
-              <InfoItem
-                key={key}
-                icon={<GraduationCap size={24} />}
-                label={key.charAt(0).toUpperCase() + key.slice(1)}
-                value={value}
-              />
-            ))}
+          <div>
+            <InfoItem
+              icon={<GraduationCap className="h-4 w-4" />}
+              label="Degree"
+              value={educationalInfo.degree}
+              placeholder="Bachelor of Science in Computer Science"
+            />
+            <InfoItem
+              icon={<GraduationCap className="h-4 w-4" />}
+              label="Institution"
+              value={educationalInfo.institution}
+              placeholder="University of Example"
+            />
+            <InfoItem
+              icon={<Calendar className="h-4 w-4" />}
+              label="Start Date"
+              value={educationalInfo.startDate}
+              placeholder="YYYY-MM-DD"
+            />
+            <InfoItem
+              icon={<Calendar className="h-4 w-4" />}
+              label="End Date"
+              value={educationalInfo.endDate}
+              placeholder="YYYY-MM-DD"
+            />
+            <InfoItem
+              icon={<GraduationCap className="h-4 w-4" />}
+              label="Description"
+              value={educationalInfo.description}
+              placeholder="Description of your education"
+            />
             <div className="flex justify-end">
-              <Button onClick={handleEdit}>Edit</Button>
+              <Button onClick={handleEdit} className="">
+                Edit
+              </Button>
             </div>
-          </>
+          </div>
         )}
       </CardContent>
     </Card>
   );
 };
+
 export default EducationalInfo;

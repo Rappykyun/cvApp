@@ -1,40 +1,30 @@
 import React, { useState, useEffect } from "react";
-import {
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Briefcase,
-  GraduationCap,
-  Calendar,
-} from "lucide-react";
+import { Briefcase, Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const GeneralInfo = ({ setGeneralInfo }) => {
+const WorkInfo = ({ setWorkInfo }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [personalInfo, setPersonalInfo] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    occupation: "",
-    education: "",
-    birthDate: "",
+  const [workInfo, setWorkInfoState] = useState({
+    company: "",
+    position: "",
+    startDate: "",
+    endDate: "",
+    description: "",
   });
 
   useEffect(() => {
-    setGeneralInfo(personalInfo);
-  }, [personalInfo, setGeneralInfo]);
+    setWorkInfo(workInfo);
+  }, [workInfo, setWorkInfo]);
 
   const handleEdit = () => setIsEditing(true);
   const handleSave = () => setIsEditing(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPersonalInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
+    setWorkInfoState((prevInfo) => ({ ...prevInfo, [name]: value }));
   };
 
   const InfoItem = ({ icon, label, value, placeholder }) => (
@@ -51,13 +41,13 @@ const GeneralInfo = ({ setGeneralInfo }) => {
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>
-          {isEditing ? "Edit Personal Information" : "Personal Information"}
+          {isEditing ? "Edit Work Information" : "Work Information"}
         </CardTitle>
       </CardHeader>
       <CardContent>
         {isEditing ? (
           <form className="space-y-4">
-            {Object.entries(personalInfo).map(([key, value]) => (
+            {Object.entries(workInfo).map(([key, value]) => (
               <div key={key} className="flex items-center space-x-4">
                 <Label htmlFor={key} className="w-32">
                   {key.charAt(0).toUpperCase() + key.slice(1)}
@@ -67,8 +57,7 @@ const GeneralInfo = ({ setGeneralInfo }) => {
                   name={key}
                   value={value}
                   onChange={handleChange}
-                  type={key === "birthDate" ? "date" : "text"}
-                  placeholder={key === "birthDate" ? "YYYY-MM-DD" : value}
+                  type={key.includes("Date") ? "date" : "text"}
                   className="flex-1"
                 />
               </div>
@@ -81,42 +70,35 @@ const GeneralInfo = ({ setGeneralInfo }) => {
           </form>
         ) : (
           <div>
-            <h2 className="text-2xl font-bold mb-4">{personalInfo.name}</h2>
             <InfoItem
-              icon={<Mail className="h-4 w-4" />}
-              label="Email"
-              value={personalInfo.email}
-              placeholder="your.email@example.com"
-            />
-            <InfoItem
-              icon={<Phone className="h-4 w-4" />}
-              label="Phone"
-              value={personalInfo.phone}
-              placeholder="123-456-7890"
-            />
-            <InfoItem
-              icon={<MapPin className="h-4 w-4" />}
-              label="Address"
-              value={personalInfo.address}
-              placeholder="123 Main St, Anytown, USA"
+              icon={<Briefcase className="h-4 w-4" />}
+              label="Company"
+              value={workInfo.company}
+              placeholder="Your Company"
             />
             <InfoItem
               icon={<Briefcase className="h-4 w-4" />}
-              label="Occupation"
-              value={personalInfo.occupation}
-              placeholder="Your Occupation"
-            />
-            <InfoItem
-              icon={<GraduationCap className="h-4 w-4" />}
-              label="Education"
-              value={personalInfo.education}
-              placeholder="Your Education"
+              label="Position"
+              value={workInfo.position}
+              placeholder="Your Position"
             />
             <InfoItem
               icon={<Calendar className="h-4 w-4" />}
-              label="Birth Date"
-              value={personalInfo.birthDate}
+              label="Start Date"
+              value={workInfo.startDate}
               placeholder="YYYY-MM-DD"
+            />
+            <InfoItem
+              icon={<Calendar className="h-4 w-4" />}
+              label="End Date"
+              value={workInfo.endDate}
+              placeholder="YYYY-MM-DD"
+            />
+            <InfoItem
+              icon={<Briefcase className="h-4 w-4" />}
+              label="Description"
+              value={workInfo.description}
+              placeholder="Job description"
             />
             <div className="flex justify-end">
               <Button onClick={handleEdit} className="">
@@ -130,4 +112,4 @@ const GeneralInfo = ({ setGeneralInfo }) => {
   );
 };
 
-export default GeneralInfo;
+export default WorkInfo;
